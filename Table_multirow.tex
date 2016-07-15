@@ -1,0 +1,71 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{multirow}
+\usepackage{slashbox}
+\usepackage{CJK}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{hyperref}
+%\usepackage{abstract}
+%\usepackage{multicol}
+%\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\DeclareGraphicsExtensions{.eps,.ps,.jpg,.bmp}
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+\begin{table*}[htbp]
+\centering
+\caption{Parameters}
+\label{table:parameters}
+\begin{tabular}{llccl}
+\toprule
+Category & Name & Definition & Range \\
+\midrule
+\multirow{4}{2cm}{Shuffle} & spark.reducer.maxSizeInFlight & ling & feng \\ 
+& spark.shuffle.file.buffer & luo & ni \\ & spark.shuffle.memoryFraction & ling & feng \\
+& spark.shuffle.sort.bypassMergeThreshold & luo & ni \\
+\hline
+
+\multirow{2}{2cm}{CPU} & spark.driver.cores & ling & feng \\
+& spark.executor.cores & luo & ni \\
+\hline
+
+\multirow{5}{2cm}{Memory} & spark.driver.memory & ling & feng \\
+& spark.executor.memory & luo & ni \\ & spark.storage.memoryFraction & ling & feng \\
+& spark.storage.memoryMapThreshold & luo & ni \\ & spark.storage.unrollFraction & luo & ni \\
+\hline
+
+\multirow{6}{2cm}{Communication} & spark.akka.failure.detector.threshold & ling & feng \\
+& spark.akka.heartbeat.pauses & luo & ni \\ & spark.akka.heartbeat.interval & ling & feng \\
+& spark.akka.threads & luo & ni \\ & spark.network.timeout & luo & ni \\
+& spark.locality.wait & luo & ni \\
+\hline
+
+\multirow{1}{2cm}{Scheduler} & spark.scheduler.revive.interval & ling & feng \\
+\hline
+
+\multirow{3}{2cm}{Speculation} & spark.speculation.interval & ling & feng \\
+& spark.speculation.multiplier & luo & ni \\ & spark.speculation.quantile & ling & feng \\
+\hline
+
+\multirow{3}{2cm}{Compression} & spark.io.compression.codec & ling & feng \\
+& spark.io.compression.lz4.blockSize & luo & ni \\ & spark.io.compression.snappy.blockSize & ling & feng \\
+\hline
+
+\multirow{2}{2cm}{Serialization} & spark.kryoserializer.buffer.max & ling & feng \\
+& spark.kryoserializer.buffer & luo & ni \\
+\hline
+
+\multirow{1}{2cm}{Broadcast} & spark.broadcast.blockSize & ling & feng \\
+\hline
+
+\multirow{1}{2cm}{Task} & spark.task.maxFailures & ling & feng \\
+
+\bottomrule
+\end{tabular}
+\end{table*}
+
+
+\end{document}
