@@ -1,0 +1,126 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{tikz}
+
+%\floatname{algorithm}{算法}
+%\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+%\renewcommand{\algorithmicensure}{\textbf{输出:}}
+    \title{091M4041H - Assignment 3}
+    \author{No. 201628017729008,  Lin Lingfeng}
+
+\begin{document}
+\begin{CJK*}{GBK}{song}
+    \maketitle
+
+    \section{whether there exists an undirected graph}
+
+    \paragraph{} Given a list of n natural numbers $d_1, d_2,...,d_n$, show how to decide in polynomial time whether there exists an undirected graph $G = (V, E)$ whose node degrees are precisely the numbers $d_1, d_2,...,d_n$. $G$ should not contain multiple edges between the same pair of nodes, or "loop" edges with both endpoints equal to the same node.
+
+    \paragraph{}\textbf{Solution:}\\
+    题目的意思是：给定$n$ 个自然数 $d_1, d_2,...,d_n$，使得构成的无向图。该无向图的每个顶点的度正好是$d_1, d_2,...,d_n$。易知，当某个$d_i$的值大于n时，无法构成无向图。因此首先判断是否大于$n$。即对$d_1, d_2,...,d_n$进行从大到小排序。假设得到的$d_1, d_2,...,d_n$是排好序的。当$d_1$ 小于$n$时，对$d_2, d_3...$直到第$d_1$个后面的节点依次减一。代表$d_1$与其紧跟其后的节点相连。如果出现小于零的情况，则代表节点不够$d_1$连了，所以无法构成无向图。如果没有出现小于零，则$n-1$对后续节点重复$d_1$节点的操作。
+
+%    $$OPT(s_i, s_j)=
+%    \begin{cases}
+%        POT(s_{i+1}, s_j)&                             if S_i\%S_j != 0 or S_j\%S_i != 0 \\
+%        POT(s_i, s_{j+1})&                             if S_i\%S_j = 0 or S_j\%S_i = 0
+%    \end{cases}$$
+
+    \paragraph{}\textbf{Algorithm:}\\
+    \begin{algorithm}
+        \caption{whether there exists an undirected graph}
+        \begin{algorithmic}[1]
+            \Require $dataset$: $D = d_1, d_2,...,d_n$, \qquad The size of $D$: $n$
+            \Ensure ture or false
+            \Function {OPT}{$i,j$}
+                \While{n}
+                    \State sort(D)
+                    \State $d_1$ = d[0]
+                    \If {$d_1 > n$}
+                        \State throw error
+                    \Else
+                        \For {$i=1$ to $d_1$}
+                            d[i] -= 1
+                            \If{d[i] $<$ 0}
+                                \State throw error
+                            \EndIf
+                        \EndFor
+                        \State d[0] = 0
+                        \State n -= 1
+                    \EndIf
+                \EndWhile
+                \State return ture
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+
+
+
+The \textbf{Lemma} is
+    \begin{equation*}
+    G(\{d_1, d_2,...,d_n\}) \leftrightarrow G(\{d_2 - 1, d_3 - 1,...,d_{d_1+1} - 1, d_{d_1+2},...,d_n\})
+    \end{equation*}
+
+\paragraph{}\textbf{Correctness Proof:}
+取最大度数的点是为了后面有足够多的点可以抵消该点的度数，首先随机找出一个节点，连接其他$d_i$个节点，之后就不再考虑该节点，然后在剩下的节点中找度数最大的节点，给它分配第二大的度数，即与$d_{i+1}$个节点连接，如此类推，直到分配完所有度数。
+
+
+\paragraph{}\textbf{Runtime Analysis:} 一个遍历中嵌套一个排序，所以算法的时间复杂度为$O(n^2 logn)$.
+
+\section{Partition}
+
+%\paragraph{}There are n distinct jobs, labeled $J_1, J_2,..., J_n$ , which can be performed completely independently of one another. Each job consists of two stages: ?rst it needs to be preprocessed on the supercomputer, and then it needs to be finished on one of the PCs. Let`s say that job $J_i$ needs $p_i$ seconds of time on the supercomputer, followed by $f_i$ seconds of time on a PC. Since there are at least $n$ PCs available on the premises, the ?nishing of the jobs can be performed on PCs at the same time. However, the supercomputer can only work on a single job a time without any interruption. For every job, as soon as the preprocessing is done on the supercomputer, it can be handed off to a PC for finishing.
+
+\paragraph{}Suppose you are given two sets $A$ and $B$, each containing n positive integers. You can choose to reorder each set however you like. After reordering, let $a_i$ be the $ith$ element of set $A$, and let $b_i$ be the ith element of set B. You then receive a payoff of $\prod^{n}_{i=1} a^{b_i}_i$. Give an polynomial-time algorithm that will maximize your payoff.
+
+\paragraph{}\textbf{Solution:}\\
+因为对于指数函数，$y = \prod^{n}_{i=1} a^{b_i}_i$ 来说，$y$ 是 $a$ 的增函数，$y$也是$b$的增函数，对$y = \prod^{n}_{i=1} a^{b_i}_i$ 取对数，得到$log y = \sum^{n}_{i=1} log(a^{b_i}_i) = \sum^{n}_{i=1} b^i log(a_i)$。因为$a_i, b_i$都是正数，不存在偶函数性质。当底数 $a_i$ 的值大于自然底数 $e$ 时， $b_i log(a_i)$是以正数增加 如图 \ref{fig 1}，所以$a_i, b_i$越大越好。 所以要使得 $y$ 达最大，排个序即可。
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=5in]{3.jpg}
+\caption{The function of $y = x$ and $y = logx$}
+\label{fig 1}
+\end{figure*}
+
+    \paragraph{}\textbf{Algorithm:}\\
+    \begin{algorithm}
+        \caption{maximize your payoff}
+        \begin{algorithmic}[1] %每行显示行号
+            \Require $database$: $A, B$, \qquad The size of $A, B$: $n$
+            \Ensure payoff
+            \Function {maximize your payoff}{$A,B$}
+                \State sort(A)
+                \State sort(B)
+                \For{$i = 1$ to n}
+
+                        \State payoff = $\prod^{n}_{i=1} a^{b_i}_{i}$
+
+                \EndFor
+                \State \Return payoff
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+
+
+\paragraph{}\textbf{Correctness Proof:}\\
+假设$a^{b_i}_{i}$ 是各自队列最大的2个数，用较小数$b_i > b_j $代替，则$a^{b_j}_{i}$ 与$a^{b_i}_{j}$ ，和 $a^{b_i}_{i}$ 与 $a^{b_j}_{j}$
+
+\begin{equation*}
+a^{b_j}_{i} a^{b_i}_{j} = a^{b_j}_{i} a^{b_i - b_j}_{j} a^{b_j}_{j}
+                        \leq a^{b_j}_{i} a^{b_i - b_j}_{i} a^{b_j}_{j}
+                        \leq a^{b_j}_{i} a^{-b_j}_{i} a^{b_i}_{i} a^{b_j}_{j}
+                        = a^{b_i}_{i} a^{b_j}_{j}
+\end{equation*}
+
+
+\paragraph{}\textbf{Runtime Analysis:} \\
+$n$次循环，2个排序。时间为：$O(n log n)$
+
+\end{CJK*}
+\end{document} 
