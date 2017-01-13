@@ -1,0 +1,205 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{mathtools}
+
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{tikz}
+
+
+\setlength{\topmargin}{-.5in}
+\setlength{\textheight}{9in}
+% \setlength{\oddsidemargin}{.125in}
+% \setlength{\textwidth}{6.25in}
+
+\begin{CJK*}{GBK}{song}
+    \title{模式识别与机器学习第三章作业}
+    \author{$\spadesuit$ 201628017729xxx   Rio Lin $\spadesuit$}
+    \date{ 2016 年 12 月 10 日}
+\end{CJK*}
+
+\begin{document}
+\begin{CJK*}{GBK}{song}
+\maketitle
+
+\paragraph{1} 将该问题看做一个四类分类满足情况匱的问题，将其中一类划分为一个
+子类，其余三类划分为第二个子类。第二个子类中用多类情况匲的方法判
+别 $\frac{7\times(7-1)}{2}=21$ 个判别函数，所以共需 $21+4 = 25$ 个判别函数。
+
+\paragraph{2}
+多类情况1 如图\ref{1} 多类情况2 如图 \ref{2} 多类情况3 如图 \ref{3}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.52\textwidth]{three_12.jpg}
+\caption{multi model ONE}
+\label{1}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.52\textwidth]{three_22.jpg}
+\caption{multi model TWO}
+\label{2}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.52\textwidth]{three_32.jpg}
+\caption{multi model THREE}
+\label{3}
+\end{figure}
+
+\paragraph{3} 如果这些模式线性可分，则至少需要匴个系数分量。建立二次多项式判
+别函数，则至少需要 $C^2_5=10$ 个系数分量.
+
+\paragraph{4} 将向量写成增广形式:
+\begin{align*}
+& x_1=\begin{pmatrix*}0 & 0 & 0 & 1\end{pmatrix*}^T\\
+& x_2=\begin{pmatrix*}1 & 0 & 0 & 1\end{pmatrix*}^T\\
+& x_3=\begin{pmatrix*}1 & 0 & 1 & 1\end{pmatrix*}^T\\
+& x_4=\begin{pmatrix*}1 & 1 & 0 & 1\end{pmatrix*}^T\\
+& x_5=\begin{pmatrix*}0 & 0 & -1 & -1\end{pmatrix*}^T\\
+& x_6=\begin{pmatrix*}0 & -1 & -1 & -1\end{pmatrix*}^T\\
+& x_7=\begin{pmatrix*}0 & -1 & 0 & -1\end{pmatrix*}^T\\
+& x_8=\begin{pmatrix*}-1 & -1 & -1 & -1\end{pmatrix*}^T\\
+\end{align*}
+
+取 C=1, $\omega(1)=(\begin{smallmatrix}0 & 0 & 0\end{smallmatrix})^T$
+\begin{align*}
+& \omega^T(1)x_{(1)}=0=0 \Rightarrow \omega(2)=\omega(1)+x_{(1)}=\begin{pmatrix*}0 & 0 & 0 & 1\end{pmatrix*}^T\\
+& \omega^T(2)x_{(2)}=1>0 \Rightarrow \omega(3)=\omega(2)=\begin{pmatrix*}0 & 0 & 0 & 1\end{pmatrix*}^T\\
+& \omega^T(3)x_{(3)}=1>0 \Rightarrow \omega(4)=\omega(3)=\begin{pmatrix*}0 & 0 & 0 & 1\end{pmatrix*}^T\\
+& \omega^T(4)x_{(4)}=1>0 \Rightarrow \omega(5)=\omega(3)=\begin{pmatrix*}0 & 0 & 0 & 1\end{pmatrix*}^T\\
+& \omega^T(5)x_{(5)}=-1<0 \Rightarrow \omega(6)=\omega(5)+x_{(5)}=\begin{pmatrix*}0 & 0 & -1 & 0\end{pmatrix*}^T\\
+& \omega^T(6)x_{(6)}=1>0 \Rightarrow \omega(7)=\omega(6)=\begin{pmatrix*}0 & 0 & -1 & 0\end{pmatrix*}^T\\
+& \omega^T(7)x_{(7)}=0=0 \Rightarrow \omega(8)=\omega(7)+x_{(7)}=\begin{pmatrix*}0 & -1 & -1 & -1\end{pmatrix*}^T\\
+& \omega^T(8)x_{(8)}=3>0 \Rightarrow \omega(9)=\omega(8)=\begin{pmatrix*}0 & -1 & -1 & -1\end{pmatrix*}^T
+\end{align*}
+
+接下来按照这样一直循环下去，可以得到最后解为 $\omega(41)=(\begin{smallmatrix}2 & -2 & -2 & 1\end{smallmatrix})^T$ 对应的判别函数为
+\begin{align*}
+d(x)=2x_1-2x_2-2x_3+1
+\end{align*}
+
+\paragraph{5}
+将向量写成增广形式:
+\begin{align*}
+& x_1=\begin{pmatrix*}-1 & -1 & 1\end{pmatrix*}^T\\
+& x_2=\begin{pmatrix*}0 & 0 & 1\end{pmatrix*}^T\\
+& x_3=\begin{pmatrix*}1 & 1 & 1\end{pmatrix*}^T\\
+\end{align*}
+
+取初始值 $C=1, \omega_1(1)=\omega_2(1)=\omega_3(1)=(\begin{smallmatrix}0 & 0 & 0\end{smallmatrix})^T$\\
+第一轮以 $x_1=(\begin{smallmatrix}-1 & -1 & 1\end{smallmatrix})^T$ 为训练样本:
+\begin{align*}
+& d_1(1)=\omega_1^T(1)x_{1}=0 \Rightarrow \omega_1(2)=\omega_1(1)+x_1=\begin{pmatrix*}-1 & -1 & 1\end{pmatrix*} \\
+& d_2(1)=\omega_2^T(1)x_{1}=0 \Rightarrow \omega_2(2)=\omega_2(1)-x_1=\begin{pmatrix*}1 & 1 & -1\end{pmatrix*} \\
+& d_3(1)=\omega_3^T(1)x_{1}=0 \Rightarrow \omega_3(2)=\omega_3(1)-x_1=\begin{pmatrix*}1 & 1 & -1\end{pmatrix*} \\
+\end{align*}
+
+继续循环迭代直到满足 $d_1(k)\leq d_2(k), d_1(k)\leq d_3(k)$ ($k$ 是迭代次数,分类结果正确。得到权值向量为：
+\begin{align*}
+& \omega_1=\begin{pmatrix*}-1 & -1 & 1\end{pmatrix*}^T\\
+& \omega_2=\begin{pmatrix*}0 & 0 & 0\end{pmatrix*}^T\\
+& \omega_3=\begin{pmatrix*}2 & 2 & -2\end{pmatrix*}^T\\
+\end{align*}
+
+对应判别函数为:
+\begin{align*}
+& d_1(x)=-x_1-2x_2-1\\
+& d_2(x)=0 \\
+& d_3(x)=2x_1+2x_2-2
+\end{align*}
+
+\paragraph{6}
+\begin{align*}
+\frac{\partial J}{\partial \omega}=\frac{1}{4||x||^2}[(\omega^Tx-b)|\omega^Tx-b|^T][x-xsign(\omega^Tx-b)]
+\end{align*}
+
+其中,
+\begin{align*}
+sign(\omega^Tx-b)=
+\begin{cases}
+1, & \omega^Tx-b>0 \\
+-1,& \omega^Tx-b\leq 0 \\
+\end{cases}
+\end{align*}
+
+由梯度法则可得
+\begin{align*}
+\omega(k+1)=\omega(k)+\frac{C}{4||x||^2}[(\omega(k)^Tx-b)|\omega(k)^Tx-b|^T][x-xsign(\omega^Tx-b)]
+\end{align*}
+
+其中 $x_k$ 是第 $k$ 次迭代的训练模式样本：
+\begin{align*}
+\omega(k+1)=\omega(k)+C
+\begin{cases}
+0, & \omega^Tx-b>0 \\
+\frac{x_k}{||x_k||^2}(b-\omega_k^Tx_k), & \omega^Tx-b\leq 0
+\end{cases}
+\end{align*}
+
+上式 $\omega^Tx-b>0$ 时不对权向量进行修正，而 $\omega^Tx-b\leq 0$ 时进行修正。
+
+\paragraph{7}
+由第一类势函数的定义可得势函数：
+
+\begin{align*}
+K(x,x_k)=\sum_{i=1}^{9}\varphi_i(x)\varphi_i(x_k)
+\end{align*}
+
+给定训练样本：
+\begin{align*}
+& x_{(1)}=\begin{pmatrix*}0 & 1\end{pmatrix*}^T \\
+& x_{(2)}=\begin{pmatrix*}0 & -1\end{pmatrix*}^T \\
+& x_{(3)}=\begin{pmatrix*}1 & 0\end{pmatrix*}^T \\
+& x_{(4)}=\begin{pmatrix*}-1 & 0\end{pmatrix*}^T \\
+\end{align*}
+
+累计势位 $K(x)$ 的迭代计算如下：
+\begin{align*}
+& 1: x_{(1)}=\begin{pmatrix*}0 & 1\end{pmatrix*}^T \in \omega_1, K_1(x)=-15+20x_2+40x_2^2+24x_1^2-32x_1^2x_2-64x_1^2x_2^2 \\
+& 2: x_{(2)}=\begin{pmatrix*}0 & -1\end{pmatrix*}^T \in \omega_1, K_1(x_{(2)})=5>0,K_2(x)=K_1(x)
+\end{align*}
+
+将全部的样本进行循环迭代，直到所有样本都分类正确为止。此时的判别函数为：
+\begin{align*}
+d(x)=K_{10}(x)=-32x_1^2+32x_2^2
+\end{align*}
+
+\paragraph{8}
+取 $\alpha=1$ 此时的势函数为：
+\begin{align*}
+K(x,x_k)=e^{-||x-x_k||^2}=e^{-[(x_1-x_{k1})^2+(x_2-x_{k2})^2]}
+\end{align*}
+
+给定训练样本：
+\begin{align*}
+& x_{(1)}=\begin{pmatrix*}0 & 1\end{pmatrix*}^T \\
+& x_{(2)}=\begin{pmatrix*}0 & -1\end{pmatrix*}^T \\
+& x_{(3)}=\begin{pmatrix*}1 & 0\end{pmatrix*}^T \\
+& x_{(4)}=\begin{pmatrix*}-1 & 0\end{pmatrix*}^T \\
+\end{align*}
+
+累计势位 $K(x)$ 的迭代计算如下：
+\begin{align*}
+& 1: x_{(1)}=\begin{pmatrix*}0 & 1\end{pmatrix*}^T \in \omega_1, K_1(x)=-e^{-x_1^2-(x_2-1)^2} \\
+& 2: x_{(2)}=\begin{pmatrix*}0 & -1\end{pmatrix*}^T \in \omega_1, K_1(x_{(2)})=e^{-4-0)}>0,K_2(x)=K_1(x)
+\end{align*}
+
+将全部的样本进行循环迭代，直到所有样本都分类正确为止。此时的判别
+函数为：
+\begin{align*}
+d(x)=K_{10}(x)=e^{-x_1^2-(x_2+1)^2}+e^{-x_1^2-(x_2-1)^2}-e^{-(x_1+1)^2-x_2^2}-e^{-(x_1-1)^2-x_2^2}
+\end{align*}
+
+\end{CJK*}
+\end{document} 
