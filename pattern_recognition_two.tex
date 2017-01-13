@@ -1,0 +1,65 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{tikz}
+
+%\floatname{algorithm}{算法}
+%\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+%\renewcommand{\algorithmicensure}{\textbf{输出:}} $\clubsuit$
+\begin{CJK*}{GBK}{song}
+    \title{模式识别与机器学习第二章作业}
+    \author{$\spadesuit$ 201628017729xxx   Rio Lin $\spadesuit$}
+    \date{ 2016 年 12 月 10 日}
+\end{CJK*}
+\begin{document}
+\begin{CJK*}{GBK}{song}
+    \maketitle
+    \section{求两类模式之间的贝叶斯判别界面的方程式}
+    \noindent
+    设以下模式类别具有正态概率密度函数：\\
+    \[\omega_1: \{(0,0)^T, (2,0)^T, (2,2)^T, (0,2)^T \}\]
+    \[\omega_1: \{(4,4)^T, (6,4)^T, (6,6)^T, (4,6)^T \}\]
+
+    \paragraph{}\textbf{第一问:}
+     设$P(\omega_1) = P(\omega_2) = 1/2$。求这两类模式之间的贝叶斯判别界面的方程式。
+     \paragraph{}\textbf{solution:}\\
+     模式的均值向量$m_i$和协方差矩阵$C_i$可用下式估计:
+     \[m_i = \frac{1}{N_i}\sum^{N_i}_{j=1}{x_{ij}} , i = 1,2\]
+     \[C_i = \frac{1}{N_i}\sum^{N_i}_{j=1}{ (x_{ij} - m_i)(x_{ij} - m_i)^T } , i = 1,2\]
+     其中$N_i$为类别$\omega_i$中模式的数目，$x_{ij}$代表在第$i$个类别中的第$j$个模式。由上式可求出:
+     \[m_1 = (1,1)\]
+     \[m_2 = (5,5)\]
+     \begin{gather*}
+      C_1 = C_2 = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}
+     \end{gather*}
+     因此
+     \begin{gather*}
+      C^{-1} = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}
+     \end{gather*}
+     由于 $P(\omega_1) = P(\omega_2) = 1/2$。 并且 $C_1 = C_2$, 并且$C$ 为对称矩阵。则判别界面为:
+     \[d_1(x) - d_2(x) = lnP(\omega_1) - lnP(\omega_2) + (m_1 - m_2)^TC^{-1}x - \frac{1}{2}m^T_1C^{-1}m_1 + \frac{1}{2}m^T_2C^{-1}m_2 =0 \]
+     化简后：
+     \[d_1(x) - d_2(x) = (m_1 - m_2)^TC^{-1}x - \frac{1}{2}m^T_1C^{-1}m_1 + \frac{1}{2}m^T_2C^{-1}m_2 =0 \]
+     把之前得到的$m_1, m_2, C$ 代入，得到：
+     \[x_1 + x_2 -6 = 0\]
+     \paragraph{}\textbf{第二问:}
+     绘出判别界面。如图 \ref{bayes} 所示。红色圆圈点代表 $\omega_1$ 类, 蓝色圆圈点代表 $\omega_2$ 类。
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.8\textwidth]{bayes.jpg}
+  \caption{Bayes Classification face}
+  \label{bayes}
+\end{figure*}
+
+    \section{编写两类正态分布模式的贝叶斯分类程序。（可选例题或上述作业题为分类模式）}
+    \noindent
+    参考附件的.py 程序
+
+\end{CJK*}
+\end{document} 
