@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{tikz}
+
+%\floatname{algorithm}{算法}
+%\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+%\renewcommand{\algorithmicensure}{\textbf{输出:}}
+    \title{091M4041H - Assignment 4}
+    \author{Ren Jiao}
+
+\begin{document}
+\begin{CJK*}{GBK}{song}
+    \maketitle
+
+    \section{Gas Station Placement}
+
+    \paragraph{} Let's consider a long, quiet country road with towns scattered very sparsely along it. Sinopec, largest oil rener in China, wants to place gas stations along the road. Each gas station is assigned to a nearby town, and the distance between any two gas stations being as small as possible. Suppose there are $n$ towns with distances from one endpoint of the road being $d_1$ , $d_2$ ,..., $d_n$ . $N$ gas stations are to be placed along the road, one station for one town. Besides, each station is at most $r$ far away from its correspond town. $d_1$ , $d_2$ ,..., $d_n$ and $r$ have been given and satisfied $d_1 < d_2 ... < d_n$, $0 < r < d_1$ and $d_i + r < d_{i+1}-r$ for all $i$. The objective is to nd the optimal placement such that the maximal distance between two successive gas stations is minimized.\\
+    Please formulate this problem as an LP.
+
+    \paragraph{}\textbf{Solution:}  \\
+    md :    2个加油站之间的最大距离 \\
+    $x_i$ : 第$i$个加油站的距离     \\
+    $d_i$ : 相应的第$i$个村庄的距离 \\
+    $r$   : 给定的距离限制条件      \\
+
+\begin{alignat*}{2}
+\min\quad & md &{}& \tag{LP1} \label{eqn - lp}\\
+\mbox{s.t.}\quad
+ & x_{i}  \leq d_i + r, &\quad& \\ %\forall P \in \mathcal{P}_{st}\\
+ & -x_{i} \leq -d_i + r, &\quad& \\
+ & d_{i+1}-d_i - md \leq 0, &\quad& \\
+ & x_{i}, md \geq 0, &\quad& \\
+ & x_{\ell} \geq 0, &{}&           %\forall \ell \in L \nonumber
+\end{alignat*}
+
+\section{Stable Matching Problem}
+
+\paragraph{}$n$ men $(m_1 , m_2 ,..., m_n )$ and $n$ women $(w_1 , w_2 ,..., w_n )$, where each person has ranked all members of the opposite gender, have to make pairs. You need to give a stable matching of the men and women such that there is no unstable pair. Please choose one of the two following known conditions, formulate the problem as an ILP ($hint$: Problem 1.1 in this assignment), construct an instance
+and use GLPK or Gurobi or other similar tools to solve it.\\
+1. You have known that for every two possible pairs (man $m_i$ and woman $w_j$ , man $m_k$ and woman $w_l$ ), whether they are stable or not. If they are stable, then $S_{i,j,k,l}$ = 1; if not, $S_{i,j,k,l}$ = 0. $(i, j, k, l \in \{1, 2,..., n\} )$ \\
+2. You have known that for every man $m_i$ , whether $m_i$ likes woman $w_j$ more than $w_k$ . If he does, then $p_{i,j,k}$ = 1; if not, $p_{i,j,k}$ = 0. Similarly, if woman $w_i$ likes man $m_j$ more than $m_k$, then $q_{i,j,k}$= 1, else $q_{i,j,k}$ = 0. $(i, j, k \in \{1, 2,..., n\})$
+
+\paragraph{}\textbf{Solution:}\\
+假设: 当 man $i$ 和 woman $j$ 结婚： $x_{ij}$ = 1， 否者 $x_{ij}$ = 1。
+\paragraph{}
+1.
+\begin{alignat*}{2}
+\min\quad & 0 &{}& \tag{LP2} \label{eqn - lp}\\
+\mbox{s.t.}\quad
+ & \sum^{n}_{i=1}x_{ij}  = 1, &\quad& j = 1,2,...,n\\
+ & \sum^{n}_{j=1}x_{ij}  = 1, &\quad& i = 1,2,...,n\\
+ & x_{ij} + x_{kl} \leq S_{i,j,k,l}+1, &\quad& i,j,k,l = 1,2,...,n, i \neq k, j \neq l\\
+ & x_{ij} \in \{0,1\} &{}& i,j = 1,2,...,n           %\forall \ell \in L \nonumber
+\end{alignat*}
+
+\paragraph{}
+2.
+\begin{alignat*}{2}
+\min\quad & 0 &{}& \tag{LP3} \label{eqn - lp}\\
+\mbox{s.t.}\quad
+ & \sum^{n}_{i=1}x_{ij}  = 1, &\quad& j = 1,2,...,n\\
+ & \sum^{n}_{j=1}x_{ij}  = 1, &\quad& i = 1,2,...,n\\
+ & x_{ij} + x_{kl} \leq 3-p_{l,k,j}-q{k,l,i}, &\quad& i,j,k,l = 1,2,...,n, i \neq k, j \neq l\\
+ & x_{ij} \in \{0,1\} &{}& i,j = 1,2,...,n           %\forall \ell \in L \nonumber
+\end{alignat*}
+
+$-\frac{a_{me}}{a_{le}}b_l \Longrightarrow -\frac{c_{e}}{a_{le}}b_l$
+
+\paragraph{}
+$OPT[1,2] + OPT[3,3] + p_0 \times p_3 \times p_4 (=18)\Longrightarrow OPT[1,2] + OPT[3,3] + p_0 \times p_2 \times p_3 (=18)$
+\paragraph{}
+对应的数值为： $6 + 0 + 12 = 18$
+
+\paragraph{}
+$OPT[1,1] + OPT[2,3] + p_0 \times p_2 \times p_4 (=32)\Longrightarrow OPT[1,1] + OPT[2,3] + p_0 \times p_1 \times p_3 (=32)$
+\paragraph{}
+对应的数值为：$0 + 24 + 8 = 32$
+
+\end{CJK*}
+\end{document} 
