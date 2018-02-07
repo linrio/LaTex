@@ -92,9 +92,10 @@ Also, we comprehensively characterize 19 big data workloads included in BigDataB
 [启发] L2 cache MPKI 观察 bigdata 的 L3 cache miss 比较低，揭示了 LLC 对大数据任务而言很有效： Third, the average L3 cache MPKI of BigDataBench is 1.5, while the average number of HPCC, PARSEC, SPECFP, and SPECINT is 2.4, 2.3, 1.4 and 1.9, respectively。This observation shows that the LLC (L3) caches of the processors (Xeon E5645) on our testbed are efficient for the big data workloads。
 
 
-[启发] 文章揭示了 ARM 的内存管理做得不好，页缺失严重：  The ARM server is unable to effectively manage memory, as it has far more page faults per second (this may also explain the large I/O wait of the ARM server). This behaviour is likely \textbf{due to the ARM server scanning, stealing and freeing far fewer memory pages per second}. The superior x86 server memory management is also embodied in the amount of time spent by the kernel。
+[启发] TLB behaviors 观察：bigdata 的 ITLB miss 一般比较高表明：1是用了很多的第三方库，2是软件栈很深: The more ITLB MPKI of BigDataBench may be caused by the complex third party libraries and deep software stacks of the big data workloads
 
-[启发] 文章发现关于网络传输的ARM 与 x86 相似： We found that patterns relating to network traffic such as packets per second, number of context switches per second, and memory usage patterns (memory used and cached) between the servers are highly similar.
+[启发] TLB behaviors 观察：bigdata 的 DTLB miss 一般比较高表明：big data 的数据访问模式的多样性: The diversity of DTLB behaviors reflects the data access patterns are diverse in big data workloads, which proves that diverse workloads should be included in big data benchmarks.
+
 
 \end{CJK*}
 \end{document} 
