@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{enumerate}
+%\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{url}
+\usepackage{pifont}% http://ctan.org/pkg/pifon
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{array}
+
+\usepackage{siunitx}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{textcomp}
+\usepackage{dsfont}
+
+%表格上色
+%\usepackage[table]{xcolor}
+%\usepackage{colortbl}
+%\iffalse
+\usepackage{textcomp,booktabs}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{colortbl}
+\definecolor{mygray}{gray}{.9}
+\definecolor{mypink}{rgb}{.99,.91,.95}
+\definecolor{mycyan}{cmyk}{.3,0,0,0}
+\parindent=0pt
+\parskip=3ex
+%\fi
+
+\begin{CJK*}{GBK}{song}
+\title{摘要011: UIC/ATC/ScalCom/CBDCom/IoP/SmartWorld'2016 Accelerating Apache Spark Big Data Analysis with FPGAs}
+\end{CJK*}
+\author{$\spadesuit$ Manuel Ruder, Alexey Dosovitskiy, Thomas Brox $\spadesuit$}
+\begin{CJK*}{GBK}{song}
+    \author {导师：喻之斌  。学生：林灵锋}
+    \date{ 2018 年 02 月 03 日}
+\end{CJK*}
+\begin{document}
+%\large
+\begin{CJK*}{GBK}{song}
+\maketitle
+
+\section{Abstract}
+Spark has become one of the most popular engines for \emph{big data} processing. Spark provides a platform-independent, high-abstraction programming paradigm for large-scale data processing by leveraging the Java framework. Though it provides software portability across various machines, Java also limits the performance of distributed environments, such as Spark. While it may be unrealistic to rewrite platforms like Spark in a faster language, a more viable approach to mitigate its poor performance is to accelerate the computations while still working within the Java-based framework. This paper demonstrates the feasibility of incorporating FPGA acceleration into Spark, and uses a MapReduce implementation of the k-means clustering algorithm to show that acceleration is possible even when using a hardware platform that is not well-optimized for performance. An important feature of our approach is that the use of FPGAs is completely transparent to the user through the use of library functions, which is a common way by which users access functions provided by Spark. Power users can further develop other computations using high-level synthesis.
+
+
+[背景] Spark has become one of the most popular engines for \emph{big data} processing. Spark provides a platform-independent, high-abstraction programming paradigm for large-scale data processing by leveraging the Java framework.
+
+[挑战] Though it provides software portability across various machines, Java also limits the performance of distributed environments, such as Spark. While it may be unrealistic to rewrite platforms like Spark in a faster language, a more viable approach to mitigate its poor performance is to accelerate the computations while still working within the Java-based framework.
+
+[新方案] This paper demonstrates the feasibility of incorporating FPGA acceleration into Spark,
+
+[方案流程/简介] and uses a MapReduce implementation of the k-means clustering algorithm to show that acceleration is possible even when using a hardware platform that is not well-optimized for performance.
+
+[效果] An important feature of our approach is that the use of FPGAs is completely transparent to the user through the use of library functions, which is a common way by which users access functions provided by Spark. Power users can further develop other computations using high-level synthesis.
+
+
+[启发] 我们将用\textbf{18}个 workloads matric CPU performance. 而这篇工作只用了 K-means 一种算法来 matrices 系统性能。显然是不够的：  We prototype the system by implementing the k-means clustering algorithm to illustrate the characteristics of the platform and to evaluate the performance of the architecture.
+
+[启发] 这篇工作得到的系统性能结论是，程序开始阶段大量I/O操作将占满 memory，以及对于Spark 这种内存计算引擎，为其提供稳定的内存资源将是非常有意义的： On the Zynq boards, HDFS data nodes and Spark executor JVM processes consume most of the available 1GB RAM, placing a restriction on Spark’s in-memory analytic capabilities, which requires main memory to cache and repeatedly access the working dataset. Therefore, to achieve Spark’s best performance, we limit the number of data points to two million per Zynq node, allowing Spark to carry out MLlib k-means execution in memory.
+
+[文章细节] 图\ref{kmeans}是文章提出的代码结构，代码分为 Data Extraction 阶段： apply map transformations on the input RDD，JNI function calls to transfer RDD partitions into the pre-allocated buffers 与 Data Processing 阶段： Spark API transfer from the memory buffers to the FPGA，transfers the original position of the K centroids, streams their share of RDD partitions into the FPGA, and receives the partial sum and count for each cluster centre。其后，用 Vivado HLS build FPGA-accelerator libraries。
+
+[文章细节] 图\ref{fpga}是文章提出的FPGA加速器系统结构。实现了比 Spark MLLib 的加速20-40倍。
+
+\begin{figure*}[!t]
+\centering
+{\includegraphics[width=5.0in]{kmeans.png}%}
+\caption{代码结构}
+\label{kmeans}}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+{\includegraphics[width=5.0in]{fpga.png}%}
+\caption{FPGA加速器设计}
+\label{fpga}}
+\end{figure*}
+
+\end{CJK*}
+\end{document} 

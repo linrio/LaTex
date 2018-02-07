@@ -1,0 +1,74 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{enumerate}
+%\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{url}
+\usepackage{pifont}% http://ctan.org/pkg/pifon
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{array}
+
+\usepackage{siunitx}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{textcomp}
+\usepackage{dsfont}
+
+%表格上色
+%\usepackage[table]{xcolor}
+%\usepackage{colortbl}
+%\iffalse
+\usepackage{textcomp,booktabs}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{colortbl}
+\definecolor{mygray}{gray}{.9}
+\definecolor{mypink}{rgb}{.99,.91,.95}
+\definecolor{mycyan}{cmyk}{.3,0,0,0}
+\parindent=0pt
+\parskip=3ex
+%\fi
+
+\begin{CJK*}{GBK}{song}
+\title{摘要012: TPCTC'17 A Comparison of ARM Against x86 for Distributed Machine Learning Workloads}
+\end{CJK*}
+\author{$\spadesuit$ Manuel Ruder, Alexey Dosovitskiy, Thomas Brox $\spadesuit$}
+\begin{CJK*}{GBK}{song}
+    \author {导师：喻之斌  。学生：林灵锋}
+    \date{ 2018 年 02 月 04 日}
+\end{CJK*}
+\begin{document}
+%\large
+\begin{CJK*}{GBK}{song}
+\maketitle
+
+\section{Abstract}
+The rise of Machine Learning (ML) in least decade has created unprecedented surged in demand for new and more powerful hardware. Various hardware approaches exist to take on these large demands motivating the need for hardware performance benchmarks to compare these diverse hardware systems. In this paper, we present a comprehensive analysis and comparison of available benchmark suites in the field of ML and related fields. The analysis of benchmarks is used to discuss the potential ARM processors with the context of ML deployment. Our paper concludes with a brief hardware performance comparison of modern, server-grade ARM and x86 processors using a benchmark suite selected from our survey.
+
+
+[背景] The rise of Machine Learning (ML) in least decade has created unprecedented surged in demand for new and more powerful hardware.
+
+[挑战/需求] Various hardware approaches exist to take on these large demands motivating the need for hardware performance benchmarks to compare these diverse hardware systems.
+
+[新方案] In this paper, we present a comprehensive analysis and comparison of available benchmark suites in the field of ML and related fields.
+
+[方案流程/简介] None.
+
+[效果] The analysis of benchmarks is used to discuss the potential ARM processors with the context of ML deployment. Our paper concludes with a brief hardware performance comparison of modern, server-grade ARM and x86 processors using a benchmark suite selected from our survey.
+
+[启发] 文章使用 perf 和 sysstat 收集性能数据.  Sysstat provides tools such as sar that provide the capabilities to record key system performance parameters relating to CPU, memory, disk and network traffic. 
+
+[启发] 文章揭示了 L1 data cache 是对 big data 任务而言 性能影响至关重要重要： There is a very large amount of data L1 cache store misses。Although these patterns match previous findings, the magnitude of L1 cache misses for the ARM processor is far greater than the x86 processor. The significance of this is that the \textbf{L1 cache is paramount for Big Data related workloads[25]}, this may partially explain ARM's lagging performance for Spark workloads. The TLB behavior of the ARM and x86 processors is similar.
+
+[启发] 文章揭示了 ARM 的内存管理做得不好，页缺失严重：  The ARM server is unable to effectively manage memory, as it has far more page faults per second (this may also explain the large I/O wait of the ARM server). This behaviour is likely \textbf{due to the ARM server scanning, stealing and freeing far fewer memory pages per second}. The superior x86 server memory management is also embodied in the amount of time spent by the kernel。
+
+[启发] 文章发现关于网络传输的ARM 与 x86 相似： We found that patterns relating to network traffic such as packets per second, number of context switches per second, and memory usage patterns (memory used and cached) between the servers are highly similar.
+
+\end{CJK*}
+\end{document} 
