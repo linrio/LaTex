@@ -1,0 +1,100 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{enumerate}
+%\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{url}
+\usepackage{pifont}% http://ctan.org/pkg/pifon
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{array}
+
+\usepackage{siunitx}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{textcomp}
+\usepackage{dsfont}
+
+%表格上色
+%\usepackage[table]{xcolor}
+%\usepackage{colortbl}
+%\iffalse
+\usepackage{textcomp,booktabs}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{colortbl}
+\definecolor{mygray}{gray}{.9}
+\definecolor{mypink}{rgb}{.99,.91,.95}
+\definecolor{mycyan}{cmyk}{.3,0,0,0}
+\parindent=0pt
+\parskip=3ex
+%\fi
+
+\begin{CJK*}{GBK}{song}
+\title{摘要013: HPCA'14 BigDataBench: a Big Data Benchmark Suite from Internet Services}
+\end{CJK*}
+\author{$\spadesuit$ Manuel Ruder, Alexey Dosovitskiy, Thomas Brox $\spadesuit$}
+\begin{CJK*}{GBK}{song}
+    \author {导师：喻之斌  。学生：林灵锋}
+    \date{ 2018 年 02 月 05 日}
+\end{CJK*}
+\begin{document}
+%\large
+\begin{CJK*}{GBK}{song}
+\maketitle
+
+\section{Abstract}
+As architecture, systems and data management communitise pay greater attention to innovative big data systems and architecture, the pressure of benchmarking and evaluating these systems rises. However, the complexity, diversity, frequently changed workloads, and rapid evolution of big data systems rise great challenges in big data benchmarking. Considering the broad use of big data systems, for the sake of fairness, big data benchmarks must include the diversity of data and workloads, which is the prerequisite for evaluating big data systems and architecture. Most of the state-of-the-art big data benchmarks efforts target evaluating specific types of applications and system software stacks, and hence they are not qualified for serving the purposed mentationed above.
+
+This paper presents our joint research efforts on this issue with several industrial partners. Our big data benchmark suite-- BigDataBench not only cover board application scenarios, but also includes diverse and representative data sets. the project home page http://prof.ict.ac.cn/BigDataBench.
+
+Also, we comprehensively characterize 19 big data workloads included in BigDataBench with varying data inputs. We have the following observations:1, big data applications have very low operation intensity, which measures the ratio of the total number of instructions divided by the total byte number of memory accesses;2 the volume of data input has non-negligible impact on micro-architecture characteristics,  which may impose challenges for simulation-based big data architecture research;3 L1 instruction cache are higher than in the traditional benchmarks, also, L3 cache are effective for the big data applications, corroborating the observation in DCBench.
+
+
+[背景] As architecture, systems and data management communitise pay greater attention to innovative big data systems and architecture, the pressure of benchmarking and evaluating these systems rises.
+
+[挑战/需求] However, the complexity, diversity, frequently changed workloads, and rapid evolution of big data systems rise great challenges in big data benchmarking. Considering the broad use of big data systems, for the sake of fairness, big data benchmarks must include the diversity of data and workloads, which is the prerequisite for evaluating big data systems and architecture. Most of the state-of-the-art big data benchmarks efforts target evaluating specific types of applications and system software stacks, and hence they are not qualified for serving the purposed mentationed above.
+
+[新方案] This paper presents our joint research efforts on this issue with several industrial partners. Our big data benchmark suite-- BigDataBench not only cover board application scenarios, but also includes diverse and representative data sets.
+
+[方案流程/简介] the project home page http://prof.ict.ac.cn/BigDataBench.
+
+[效果] Also, we comprehensively characterize 19 big data workloads included in BigDataBench with varying data inputs. We have the following observations:1, big data applications have very low operation intensity, which measures the ratio of the total number of instructions divided by the total byte number of memory accesses;2 the volume of data input has non-negligible impact on micro-architecture characteristics,  which may impose challenges for simulation-based big data architecture research;3 L1 instruction cache are higher than in the traditional benchmarks, also, L3 cache are effective for the big data applications, corroborating the observation in DCBench.
+
+\section{Cream}
+\subsection{操作密度}
+[启发] 文章使用 perf 收集性能数据.   We use Perf, a Linux profiling tool, to collect about 20 events whose numbers and unit masks can be found in the Intel Developer's Manual. In addition, we access the proc file system to collect OS-level performance data. We collect performance data after a ramp up period, which is about 30 seconds.
+
+[启发] 文章使用 2 种测量方法. 1 是 user-perceivable metrics： The number of processed requests per second (RPS in short) is used to measure the throughput of online service workloads. In addition, we also care about latency. The number of operations per second (OPS in short) is used to evaluate ”Cloud OLTP” workloads. And, the data processed per second (DPS in short) is used for analytic workloads[22]。 2 是 architectural metrics：MIPS, and cache MPKI.
+
+[启发] 文章发现输入数据集大小影响指令执行行为：  we find that for different workloads, the instruction executing behaviors exhibit different trends as the data volume increases. 并且发现LLC 影响cycle latency： As important as L3 cache misses are–a single one can cause hundreds of cycles of latency–we track this value for different workloads under different configurations. 最终揭示了数据集大小影响 cache 性能： which shows different data inputs can result in significantly different cache performance evaluation results.
+
+[启发] 文章发现大数据任务的整浮指令比的值很高： big data workloads have the distinct feature that the ratio of integer instructions to floating-point instructions is very high.
+
+[启发] 文章计算了操作密度：operation intensity： calculate the ratio of computation to memory access ：Floating point or integer operation intensity is defined as the total number of (floating point or integer) instructions divided by the total number of memory accesses in terms of bytes in a run of the workload [28]. For example, in a run of program A, it has n floating point instructions and m bytes of memory accesses, so the operation intensity of program A is ( n ÷ m ):
+
+发现了 at L3 caches are effective in decreasing the memory access traffic.
+
+并且总结：First, big data processing heavily relies upon memory accesses. Second, big data workloads must process large volume of data, and hence most big data workloads adopt simple algorithms with low computing complexity. We can make the conclusion that big data workloads have higher demand for data movements than instruction executions. The state-of-practice processor is not efficient for big data workloads. Rather, we believe that for these workloads the floating-point unit is over-provisioned.
+
+\subsection{Memory Hierarchy Analysis.}
+[启发] L1I cache MPKI 观察： The average L1I cache MPKI of BigDataBench is 23, while that of HPCC, PARSEC, SPECFP, and SPECINT is 0.3, 2.9, 3.1, and 5.4, respectively。文章揭示了 L1 instruction cache miss 很高的原因是因为1代码量大，2软件栈很深： The possible main factors leading to the high L1I cache MPKI are \textbf{the huge code size and deep software stack} of the big data workloads。
+
+这与012篇摘要基本对应： There is a very large amount of data L1 cache store misses。Although these patterns match previous findings, the magnitude of L1 cache misses for the ARM processor is far greater than the x86 processor. The significance of this is that the \textbf{L1 cache is paramount for Big Data related workloads[25]}, this may partially explain ARM's lagging performance for Spark workloads. The TLB behavior of the ARM and x86 processors is similar.
+
+[启发] L2 cache MPKI 观察： bigdata 的 L2 cache 一般比较高，在 bigdata 任务中，在线服务又比离线服务更高：The average L2 cache MPKI of BigDataBench is 21, while that for HPCC, PARSEC, SPECFP, and SPECINT is 4.8, 5.1, 14, and 16, respectively。 Among BigDataBench, most of the online service workloads have the higher L2 cache MPKI (on the average, 40) except Nutch server (4.1), while most of the (offline and realtime) analytics workloads have the lower L2 cache MPKI (on the average, 13) except BFS (56).
+
+[启发] L2 cache MPKI 观察 bigdata 的 L3 cache miss 比较低，揭示了 LLC 对大数据任务而言很有效： Third, the average L3 cache MPKI of BigDataBench is 1.5, while the average number of HPCC, PARSEC, SPECFP, and SPECINT is 2.4, 2.3, 1.4 and 1.9, respectively。This observation shows that the LLC (L3) caches of the processors (Xeon E5645) on our testbed are efficient for the big data workloads。
+
+
+[启发] 文章揭示了 ARM 的内存管理做得不好，页缺失严重：  The ARM server is unable to effectively manage memory, as it has far more page faults per second (this may also explain the large I/O wait of the ARM server). This behaviour is likely \textbf{due to the ARM server scanning, stealing and freeing far fewer memory pages per second}. The superior x86 server memory management is also embodied in the amount of time spent by the kernel。
+
+[启发] 文章发现关于网络传输的ARM 与 x86 相似： We found that patterns relating to network traffic such as packets per second, number of context switches per second, and memory usage patterns (memory used and cached) between the servers are highly similar.
+
+\end{CJK*}
+\end{document} 
