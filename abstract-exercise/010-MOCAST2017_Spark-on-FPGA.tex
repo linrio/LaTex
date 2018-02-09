@@ -1,0 +1,127 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{enumerate}
+%\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{url}
+\usepackage{pifont}% http://ctan.org/pkg/pifon
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{array}
+
+\usepackage{siunitx}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{textcomp}
+\usepackage{dsfont}
+
+%表格上色
+%\usepackage[table]{xcolor}
+%\usepackage{colortbl}
+%\iffalse
+\usepackage{textcomp,booktabs}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{colortbl}
+\definecolor{mygray}{gray}{.9}
+\definecolor{mypink}{rgb}{.99,.91,.95}
+\definecolor{mycyan}{cmyk}{.3,0,0,0}
+\parindent=0pt
+\parskip=3ex
+%\fi
+
+\begin{CJK*}{GBK}{song}
+\title{摘要010: MOCAST'2017 Spark acceleration on FPGAs: A use case on machine learning in Pynq}
+\end{CJK*}
+\author{$\spadesuit$ Manuel Ruder, Alexey Dosovitskiy, Thomas Brox $\spadesuit$}
+\begin{CJK*}{GBK}{song}
+    \author {导师：喻之斌  。学生：林灵锋}
+    \date{ 2018 年 02 月 02 日}
+\end{CJK*}
+\begin{document}
+%\large
+\begin{CJK*}{GBK}{song}
+\maketitle
+
+\section{Abstract}
+Spark is one of the most widely used frameworks for data analytic. Spark allows fast developments of several applications such as machine learning, graph computing. In this paper, we present Sqynq: A framework for the efficient deployment on embedded systems that are based on the heterogeneous MPSoC FPGA called Pynq. The mapping of Spark on Synq allows that fast deployment of embedded and cyber-physical systems that are used in edge and fog computing. The proposed platform is evaluated in a typical machine learning application based on logistic regression. The performance evaluation shows that the heterogeneous FPGA-based MPSoC can achieve up to 11x speedup compared to the execution time in the ARM cores and can reduce significantly the development time of embedded and cyber-physical systems on Spark applications.
+
+
+[背景] Spark is one of the most widely used frameworks for data analytic. Spark allows fast developments of several applications such as machine learning, graph computing.
+
+[挑战] None.
+
+[新方案] In this paper, we present Sqynq: A framework for the efficient deployment on embedded systems that are based on the heterogeneous MPSoC FPGA called Pynq
+
+[方案流程/简介] None.
+
+[效果] The mapping of Spark on Synq allows that fast deployment of embedded and cyber-physical systems that are used in edge and fog computing. The proposed platform is evaluated in a typical machine learning application based on logistic regression. The performance evaluation shows that the heterogeneous FPGA-based MPSoC can achieve up to 11x speedup compared to the execution time in the ARM cores and can reduce significantly the development time of embedded and cyber-physical systems on Spark applications.
+
+
+[启发] Spark MLLib 的调用过程 MLLib -- Breeze library -- Netlib -- JVM(BLAS) -- JNI，具体： In the typical case, the Spark application invokes the Spark MLlib and this library utilizes the Breeze library (a numerical processing library for Scala). Breeze library invokes the Netlib Java framework that is a wrapper for low-level linear algebra tools implemented in C or Fortran. Netlib Java is executed through the Java Virtual Machine (JVM) and the actual linear algebra tools (BLAS - Basic Linear Algebra Subprograms) are executed through the Java Native Interface (JNI). It is interesting to note that BLAS can be written in C or even Fortran.
+
+[启发] 揭示了使用 Spark 应用繁琐的系统开销，特别是 machine learning 这类计算开销非常大的应用尤其明显，CPU 大部分cycles 浪费在此类 stall ？？(后面有验证)： All these layers add a significant overhead to the spark applications. Especially in applications like machine learning, where heavy computations are required, these layers add a significant overhead for the fast execution of the tasks. Most of the clock cycles are wasted for passing through all these layers.
+
+[文章细节]  代码结构如图\ref{logistics}，首先是Pynq，其次是ARM与FPGA通信：first import the Pynq libraries that are used for the configuration of the FPGA and for the interface with the accelerators. We also import the specific API library that is used for the communication of the processor with the logistic regression hardware accelerator.
+
+[文章细节] FPGA 加速器设计，如图\ref{fpga}：The Pynq platform is based on the Zynq all-programmable SoC. Zynq FPGA incorporates two RISC Cortex A9 ARM cores and a programmable logic unit in a single chip [7]. Each of these cores has 32 KB Level 1 4-way set-associative instruction and data cache and they share a 512 KB Level 2 cache. The processors are clocked at 667 Mhz and they have coherent multiprocessor support.
+
+
+
+[证] "Most of the clock cycles are wasted for passing through all these layers." 我们运行 Spark-Bench 中的 LogisticRegression 算法。其中代码结构如图\ref{logistic-Spark-bench-all}，图 \ref{logistic-Spark-bench}是加载 MLLib 库文件，图 \ref{logistic-Spark-bench2}是训练模型。我们用 CounterMiner 方法得到的重要性事件如图 \ref{importance-rank}.
+
+SDD 指  Number of stall cycles because of the execution of a DMB. This includes all DMB instructions
+being executed, even speculatively。 数据存储器隔离。DMB指令保证：仅当所有在它前面的存储器访问操作都执行完毕后，才提交（commit）在它后面的存取访问操作指令。当位于此指令前的所有内存访问均完成时，DMB指令才会完成。
+
+BRP 指 Branch or other change in program flow that could have been predicted by the branch prediction resources of the processor。也就是总的分支预测行为。
+
+PLF 指  Counts the number of data linefills caused by prefetcher requests。由于预取请求导致的 data linefill。
+
+EXI 指 Counts the number of external interrupts executed by the processor. 即外部中断次数。
+
+DCV 指  Counts the number of eviction requests because of a linefill in the data cache. 驱逐的请求数。
+
+DMI 指  Counts the number of DMB instructions speculatively executed. 猜测执行的 DMB 指令数。
+
+
+\begin{figure*}[!t]
+\centering
+{\includegraphics[width=4.0in]{logistic.png}%}
+\caption{代码结构}
+\label{logistics}}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+{\includegraphics[width=4.0in]{arm_fpga1.png}%}
+\caption{FPGA加速器设计}
+\label{fpga}}
+\end{figure*}
+
+\begin{figure}[!t]
+  \centering
+  \subfigure[MLLib库文件]{
+    \label{logistic-Spark-bench} %% label for first subfigure
+    \includegraphics[width=6.0in]{logistic-Spark-bench2.png}}
+  \subfigure[训练过程]{
+    \label{logistic-Spark-bench2} %% label for second subfigure
+    \includegraphics[width=6.0in]{logistic-Spark-bench.png}}
+  \caption{Spark-Bench 的 LogisticRegression 代码结构}
+  \label{logistic-Spark-bench-all} %% label for entire figure
+\end{figure}
+
+\begin{figure*}[!t]
+\centering
+{\includegraphics[width=3.0in]{importance-rank.png}%}
+\caption{运用 CounterMiner 方法分析运行 LogisticRegression 算法时事件的重要性排序}
+\label{importance-rank}}
+\end{figure*}
+
+
+\end{CJK*}
+\end{document} 
